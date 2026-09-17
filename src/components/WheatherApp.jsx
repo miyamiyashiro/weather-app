@@ -9,6 +9,16 @@ const WheatherApp = () => {
   }
 
 
+  const search = (city) => {
+    console.log('Searching for:', city)
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      search(location)
+    }
+  }
+
   return (
     <div className="container">
       <div className="weather-app">
@@ -18,8 +28,8 @@ const WheatherApp = () => {
             <div className="location">London</div>
           </div>
           <div className="search-bar">
-            <input type="text" placeholder="Enter Location" aria-label="Location" value={location} onChange={handleInputChanges} />
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="text" placeholder="Enter Location" aria-label="Location" value={location} onChange={handleInputChanges} onKeyDown={handleKeyDown} />
+            <i className="fa-solid fa-magnifying-glass" role="button" aria-label="Pesquisar cidade" tabIndex={0} onClick={() => search(location)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); search(location) } }}></i>
           </div>
         </div>
         <div className="weather">
