@@ -3,6 +3,9 @@ import sunny from '../assets/images/sunny.png'
 
 const WheatherApp = () => {
   const [location, setLocation] = useState('')
+  // O estado será usado na integração com a API nas próximas tasks.
+  // eslint-disable-next-line no-unused-vars
+  const [data, setData] = useState(null)
 
   const handleInputChanges = (e) => {
     setLocation(e.target.value)
