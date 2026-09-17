@@ -1,3 +1,6 @@
+// Será usada ao interpretar a resposta da API.
+// eslint-disable-next-line no-unused-vars
+import { getWeatherInfo } from '../utils/weatherCode'
 import { useState } from 'react'
 import sunny from '../assets/images/sunny.png'
 
