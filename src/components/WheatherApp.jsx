@@ -15,6 +15,30 @@ const WheatherApp = () => {
   }
 
 
+  // Será conectada à função search na etapa de integração.
+  // eslint-disable-next-line no-unused-vars
+  const getCoordinates = async (city) => {
+    const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch coordinates')
+    }
+
+    const result = await response.json()
+    if (!result.results || result.results.length === 0) {
+      return null
+    }
+
+    const place = result.results[0]
+    return {
+      name: place.name,
+      country: place.country,
+      latitude: place.latitude,
+      longitude: place.longitude,
+    }
+  }
+
   const search = (city) => {
     console.log('Searching for:', city)
   }
