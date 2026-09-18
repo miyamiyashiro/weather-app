@@ -39,6 +39,27 @@ const WheatherApp = () => {
     }
   }
 
+  // Será conectada à função search na próxima task.
+  // eslint-disable-next-line no-unused-vars
+  const getWeather = async (latitude, longitude) => {
+    const currentFields = [
+      'temperature_2m',
+      'relative_humidity_2m',
+      'wind_speed_10m',
+      'weather_code',
+    ].join(',')
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=${currentFields}&timezone=auto`
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch weather data')
+    }
+
+    const result = await response.json()
+    return result.current
+  }
+
   const search = (city) => {
     console.log('Searching for:', city)
   }
