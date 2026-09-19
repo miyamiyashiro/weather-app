@@ -4,6 +4,7 @@ import sunny from '../assets/images/sunny.png'
 import cloudy from '../assets/images/cloudy.png'
 import rainy from '../assets/images/rainy.png'
 import snowy from '../assets/images/snowy.png'
+import loadingGif from '../assets/images/loading.gif'
 
 const weatherImages = {
   sunny,
@@ -27,7 +28,7 @@ const WheatherApp = () => {
     const response = await fetch(url)
 
     if (!response.ok) {
-      throw new Error('Failed to fetch coordinates')
+      throw new Error('Falha ao buscar coordenadas')
     }
 
     const result = await response.json()
@@ -56,7 +57,7 @@ const WheatherApp = () => {
     const response = await fetch(url)
 
     if (!response.ok) {
-      throw new Error('Failed to fetch weather data')
+      throw new Error('Falha ao buscar dados do clima')
     }
 
     const result = await response.json()
@@ -72,9 +73,8 @@ const WheatherApp = () => {
     try {
       const coords = await getCoordinates(city)
       if (!coords) {
-        setError('Cidade não encontrada')
+        setError('Cidade não encontrada. Tente novamente!')
         setData(null)
-        setLoading(false)
         return
       }
 
@@ -91,7 +91,7 @@ const WheatherApp = () => {
         weatherDescription: weatherInfo.description,
       })
     } catch (err) {
-      setError('Erro ao buscar dados do clima')
+      setError('Ocorreu um erro ao buscar as informações do clima.')
       console.error(err)
     } finally {
       setLoading(false)
@@ -110,7 +110,9 @@ const WheatherApp = () => {
         <div className="search">
           <div className="search-top">
             <i className="fa-solid fa-location-dot" aria-hidden="true"></i>
-            <div className="location">{data ? `${data.cityName}, ${data.country}` : 'London'}</div>
+            <div className="location">
+              {data ? `${data.cityName}, ${data.country}` : 'Digite uma cidade'}
+            </div>
           </div>
           <div className="search-bar">
             <input
@@ -137,19 +139,30 @@ const WheatherApp = () => {
           </div>
         </div>
 
-        {loading && <div className="loading">Carregando...</div>}
+        {/* Estado de Carregamento */}
+        {loading && (
+          <div className="loading" style={{ textAlign: 'center', margin: '20px 0' }}>
+            <img src={loadingGif} alt="Carregando..." style={{ width: '50px' }} />
+          </div>
+        )}
 
-        {error && <div className="error">{error}</div>}
+        {/* Estado de Erro */}
+        {error && !loading && (
+          <div className="error-message" style={{ textAlign: 'center', color: '#ff6b6b', margin: '20px 0' }}>
+            <p>{error}</p>
+          </div>
+        )}
 
-        {!loading && !error && (
+        {/* Exibição dos Dados do Clima */}
+        {!loading && !error && data && (
           <>
             <div className="weather">
               <img
-                src={data ? weatherImages[data.weatherType] : sunny}
-                alt={data ? data.weatherDescription : 'Clear sky'}
+                src={weatherImages[data.weatherType] || sunny}
+                alt={data.weatherDescription}
               />
-              <div className="weather-type">{data ? data.weatherDescription : 'Clear'}</div>
-              <div className="temp">{data ? `${data.temperature}°` : '28°'}</div>
+              <div className="weather-type">{data.weatherDescription}</div>
+              <div className="temp">{data.temperature}°</div>
             </div>
             <div className="weather-date">
               <p>
@@ -164,12 +177,12 @@ const WheatherApp = () => {
               <div className="humidity">
                 <div className="data-name">Humidity</div>
                 <i className="fa-solid fa-droplet" aria-hidden="true"></i>
-                <div className="data">{data ? `${data.humidity}%` : '35%'}</div>
+                <div className="data">{data.humidity}%</div>
               </div>
               <div className="wind">
                 <div className="data-name">Wind</div>
                 <i className="fa-solid fa-wind" aria-hidden="true"></i>
-                <div className="data">{data ? `${data.windSpeed} km/h` : '3 km/h'}</div>
+                <div className="data">{data.windSpeed} km/h</div>
               </div>
             </div>
           </>
