@@ -3,9 +3,16 @@ import { useState } from 'react'
 const SearchBar = ({ onSearch, currentLocation }) => {
   const [location, setLocation] = useState('')
 
+  const handleSearch = () => {
+    if (location.trim()) {
+      onSearch(location)
+      setLocation('')
+    }
+  }
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      onSearch(location)
+      handleSearch()
     }
   }
 
@@ -29,7 +36,7 @@ const SearchBar = ({ onSearch, currentLocation }) => {
           role="button"
           aria-label="Pesquisar cidade"
           tabIndex={0}
-          onClick={() => onSearch(location)}
+          onClick={handleSearch}
         ></i>
       </div>
     </div>
